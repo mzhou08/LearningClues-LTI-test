@@ -8,4 +8,4 @@ openssl rsa -in jwtRS256.key -pubout -outform PEM -out jwtRS256.key.pub
 cat jwtRS256.key
 cat jwtRS256.key.pub
 
-python3 ./keys-to-jwk.py
+python3 ./keys_to_jwk.py
