@@ -1,2 +1,3 @@
 configs/jwtRS256.key
 configs/jwtRS256.key.pub
+configs/jwk.txt
