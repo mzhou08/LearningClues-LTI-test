@@ -6,8 +6,8 @@
         "auth_token_url": "https://umich-dev.instructure.com/login/oauth2/token",
         "key_set_url": "https://umich-dev.instructure.com/api/lti/security/jwks",
         "key_set": null,
-        "private_key_file": "private.key",
-        "public_key_file": "public.key",
+        "private_key_file": "jwtRS256.key",
+        "public_key_file": "jwtRS256.key.pub",
         "deployment_ids": ["319:43090cc0c11063fdf5b270094da05ed6e23ea6ad"]
     }, {
         "client_id": "85530000000000142",
@@ -15,8 +15,8 @@
         "auth_token_url": "https://umich-dev.instructure.com/login/oauth2/token",
         "key_set_url": "https://umich-dev.instructure.com/api/lti/security/jwks",
         "key_set": null,
-        "private_key_file": "private.key",
-        "public_key_file": "public.key",
+        "private_key_file": "jwtRS256.key",
+        "public_key_file": "jwtRS256.key.pub",
         "deployment_ids": ["319:43090cc0c11063fdf5b270094da05ed6e23ea6ad"]
     }]
 }
