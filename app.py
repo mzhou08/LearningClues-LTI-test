@@ -23,14 +23,19 @@ class ReverseProxied(object):
     def __init__(self, app):
         self.app = app
 
+    # defining ReverseProxied(arg), class acts like a function
     def __call__(self, environ, start_response):
+
+        #either HTTP or HTTPS
         scheme = environ.get('HTTP_X_FORWARDED_PROTO')
+        # respecting the forwarded scheme: true = HTTPS
         if scheme:
             environ['wsgi.url_scheme'] = scheme
         return self.app(environ, start_response)
 
 
 app = Flask('clues-test', static_folder='./build', static_url_path='/')
+# WSGI = Web Server Gateway Interface. Helps the app communicate with servers.
 app.wsgi_app = ReverseProxied(app.wsgi_app)
 
 config = {
@@ -86,10 +91,6 @@ def get_jwk_from_public_key(key_name):
     f.close()
     return jwk
 
-@app.route('/')
-def hello_world():
-    return app.send_static_file('index.html') 
-
 @app.route('/login/', methods=['GET', 'POST'])
 def login():
     tool_conf = ToolConfJsonFile(get_lti_config_path())
@@ -108,7 +109,7 @@ def login():
 
 @app.route('/launch/', methods=['POST'])
 def launch():
-    '''tool_conf = ToolConfJsonFile(get_lti_config_path())
+    tool_conf = ToolConfJsonFile(get_lti_config_path())
     flask_request = FlaskRequest()
     launch_data_storage = get_launch_data_storage()
     message_launch = ExtendedFlaskMessageLaunch(flask_request, tool_conf, launch_data_storage=launch_data_storage)
@@ -127,8 +128,8 @@ def launch():
         'launch_id': message_launch.get_launch_id(),
         'curr_user_name': message_launch_data.get('name', ''),
         'curr_diff': difficulty
-    }'''
-    return send_static_file('index.html')
+    }
+    return app.send_static_file('index.html')
 
 
 @app.route('/jwks/', methods=['GET'])
