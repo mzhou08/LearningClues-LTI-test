@@ -6,6 +6,8 @@ from tempfile import mkdtemp
 from flask import Flask, jsonify, request, url_for
 from flask_caching import Cache
 from flask_debugtoolbar import DebugToolbarExtension
+
+
 from werkzeug.exceptions import Forbidden
 from pylti1p3.contrib.flask import FlaskOIDCLogin, FlaskMessageLaunch, FlaskRequest, FlaskCacheDataStorage
 from pylti1p3.deep_link_resource import DeepLinkResource
@@ -28,7 +30,7 @@ class ReverseProxied(object):
         return self.app(environ, start_response)
 
 
-app = Flask('clues-test', static_folder='../../build', static_url_path='/')
+app = Flask('clues-test', static_folder='./build', static_url_path='/')
 app.wsgi_app = ReverseProxied(app.wsgi_app)
 
 config = {
@@ -69,7 +71,7 @@ class ExtendedFlaskMessageLaunch(FlaskMessageLaunch):
 
 
 def get_lti_config_path():
-    return os.path.join(app.root_path, '..', 'configs', 'game.json')
+    return os.path.join(app.root_path, 'configs', 'configs.json')
 
 
 def get_launch_data_storage():
@@ -77,13 +79,16 @@ def get_launch_data_storage():
 
 
 def get_jwk_from_public_key(key_name):
-    key_path = os.path.join(app.root_path, '..', 'configs', key_name)
+    key_path = os.path.join(app.root_path, 'configs', key_name)
     f = open(key_path, 'r')
     key_content = f.read()
     jwk = Registration.get_jwk(key_content)
     f.close()
     return jwk
 
+@app.route('/')
+def hello_world():
+    return app.send_static_file('index.html') 
 
 @app.route('/login/', methods=['GET', 'POST'])
 def login():
@@ -103,7 +108,7 @@ def login():
 
 @app.route('/launch/', methods=['POST'])
 def launch():
-    tool_conf = ToolConfJsonFile(get_lti_config_path())
+    '''tool_conf = ToolConfJsonFile(get_lti_config_path())
     flask_request = FlaskRequest()
     launch_data_storage = get_launch_data_storage()
     message_launch = ExtendedFlaskMessageLaunch(flask_request, tool_conf, launch_data_storage=launch_data_storage)
@@ -122,7 +127,7 @@ def launch():
         'launch_id': message_launch.get_launch_id(),
         'curr_user_name': message_launch_data.get('name', ''),
         'curr_diff': difficulty
-    }
+    }'''
     return send_static_file('index.html')
 
 
@@ -265,3 +270,5 @@ def scoreboard(launch_id):
 
     return jsonify(scoreboard_result)
 
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=9001)
