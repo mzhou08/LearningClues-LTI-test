@@ -116,11 +116,11 @@ def launch():
     message_launch_data = message_launch.get_launch_data()
     pprint.pprint(message_launch_data)
 
-    difficulty = message_launch_data.get('https://purl.imsglobal.org/spec/lti/claim/custom', {}) \
+    '''difficulty = message_launch_data.get('https://purl.imsglobal.org/spec/lti/claim/custom', {}) \
         .get('difficulty', None)
     if not difficulty:
         difficulty = request.args.get('difficulty', 'normal')
-
+    
     tpl_kwargs = {
         'page_title': PAGE_TITLE,
         'is_deep_link_launch': message_launch.is_deep_link_launch(),
@@ -128,7 +128,7 @@ def launch():
         'launch_id': message_launch.get_launch_id(),
         'curr_user_name': message_launch_data.get('name', ''),
         'curr_diff': difficulty
-    }
+    }'''
     return app.send_static_file('index.html')
 
 
