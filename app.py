@@ -7,6 +7,7 @@ from flask import Flask, jsonify, request, url_for
 from flask_caching import Cache
 from flask_debugtoolbar import DebugToolbarExtension
 
+from flask import session
 
 from werkzeug.exceptions import Forbidden
 from pylti1p3.contrib.flask import FlaskOIDCLogin, FlaskMessageLaunch, FlaskRequest, FlaskCacheDataStorage
@@ -19,6 +20,7 @@ from pylti1p3.registration import Registration
 #from clue_backend import app
 #from clue_backend import db_session
 
+# ReverseProxied essentially just makes sure that the app repects the HTTP forwarded proto?
 class ReverseProxied(object):
     def __init__(self, app):
         self.app = app
@@ -102,8 +104,13 @@ def login():
         raise Exception('Missing "target_link_uri" param')
 
     oidc_login = FlaskOIDCLogin(flask_request, tool_conf, launch_data_storage=launch_data_storage)
+
+    print("login", flush=True)
     return oidc_login\
-        .enable_check_cookies()\
+        .enable_check_cookies(
+            main_msg="Your browser prohibits saving cookies in an iframe.",
+            click_msg="Click here to open the application in a new tab.",
+        )\
         .redirect(target_link_uri)
 
 
@@ -129,6 +136,7 @@ def launch():
         'curr_user_name': message_launch_data.get('name', ''),
         'curr_diff': difficulty
     }'''
+    print("launched", flush=True)
     return app.send_static_file('index.html')
 
 
