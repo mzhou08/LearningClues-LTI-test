@@ -7,8 +7,6 @@ from flask import Flask, jsonify, request, url_for
 from flask_caching import Cache
 from flask_debugtoolbar import DebugToolbarExtension
 
-from flask import session
-
 from werkzeug.exceptions import Forbidden
 from pylti1p3.contrib.flask import FlaskOIDCLogin, FlaskMessageLaunch, FlaskRequest, FlaskCacheDataStorage
 from pylti1p3.deep_link_resource import DeepLinkResource
@@ -78,7 +76,7 @@ class ExtendedFlaskMessageLaunch(FlaskMessageLaunch):
 
 
 def get_lti_config_path():
-    return os.path.join(app.root_path, 'configs', 'configs.json')
+    return os.path.join(app.root_path, 'configs/', 'configs.json')
 
 
 def get_launch_data_storage():
@@ -86,7 +84,7 @@ def get_launch_data_storage():
 
 
 def get_jwk_from_public_key(key_name):
-    key_path = os.path.join(app.root_path, 'configs', key_name)
+    key_path = os.path.join(app.root_path, 'configs/', key_name)
     f = open(key_path, 'r')
     key_content = f.read()
     jwk = Registration.get_jwk(key_content)
@@ -105,7 +103,7 @@ def login():
 
     oidc_login = FlaskOIDCLogin(flask_request, tool_conf, launch_data_storage=launch_data_storage)
 
-    print("login", flush=True)
+    # print("login", flush=True)
     return oidc_login\
         .enable_check_cookies(
             main_msg="Your browser prohibits saving cookies in an iframe.",
@@ -136,7 +134,7 @@ def launch():
         'curr_user_name': message_launch_data.get('name', ''),
         'curr_diff': difficulty
     }'''
-    print("launched", flush=True)
+    # print("launched", flush=True)
     return app.send_static_file('index.html')
 
 
