@@ -7,6 +7,8 @@ from flask import Flask, jsonify, request, url_for
 from flask_caching import Cache
 from flask_debugtoolbar import DebugToolbarExtension
 
+from flask import render_template
+
 from werkzeug.exceptions import Forbidden
 from pylti1p3.contrib.flask import FlaskOIDCLogin, FlaskMessageLaunch, FlaskRequest, FlaskCacheDataStorage
 from pylti1p3.deep_link_resource import DeepLinkResource
@@ -34,7 +36,7 @@ class ReverseProxied(object):
         return self.app(environ, start_response)
 
 
-app = Flask('clues-test', static_folder='./build', static_url_path='/')
+app = Flask('clues-test', static_folder='./build', static_url_path='/', template_folder='./build')
 # WSGI = Web Server Gateway Interface. Helps the app communicate with servers.
 app.wsgi_app = ReverseProxied(app.wsgi_app)
 
@@ -91,6 +93,12 @@ def get_jwk_from_public_key(key_name):
     f.close()
     return jwk
 
+@app.route('/')
+def hello():
+    # return app.send_static_file('index.html')
+    return render_template('index.html')
+
+
 @app.route('/login/', methods=['GET', 'POST'])
 def login():
     tool_conf = ToolConfJsonFile(get_lti_config_path())
@@ -135,7 +143,8 @@ def launch():
         'curr_diff': difficulty
     }'''
     # print("launched", flush=True)
-    return app.send_static_file('index.html')
+    # return app.send_static_file('index.html')
+    return render_template('index.html')
 
 
 @app.route('/jwks/', methods=['GET'])
