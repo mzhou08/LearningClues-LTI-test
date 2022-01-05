@@ -151,12 +151,12 @@ def launch():
     # user_login_id: the login id of the requesting user.
     #   DEV: user's email
     #   PROD Canvas: user's UMich Uniqname
-    
+
     return render_template('index.html',
         course_id=context_info['canvas_course_id'],
         canvas_user_id=context_info['canvas_user_id'],
         user_username=context_info['user_username'],
-        user_login_id=context_info['user_login_id'])
+        user_login_id=context_info['login_id'])
 
 
 @app.route('/jwks/', methods=['GET'])
