@@ -142,10 +142,21 @@ def launch():
         'curr_diff': difficulty
     }'''
     context_info:dict = message_launch_data['https://purl.imsglobal.org/spec/lti/claim/custom']
+
+    # course_id: an integer representing the course's id in Canvas
+    # canvas_user_id: an integer representing the user's id in Canvas
+    # user_username: the username of the requesting user.
+    #   DEV: user's email
+    #   PROD Canvas: user's full name
+    # user_login_id: the login id of the requesting user.
+    #   DEV: user's email
+    #   PROD Canvas: user's UMich Uniqname
+    
     return render_template('index.html',
         course_id=context_info['canvas_course_id'],
         canvas_user_id=context_info['canvas_user_id'],
-        user_email=context_info['user_username'])
+        user_username=context_info['user_username'],
+        user_login_id=context_info['user_login_id'])
 
 
 @app.route('/jwks/', methods=['GET'])
