@@ -141,8 +141,11 @@ def launch():
         'curr_user_name': message_launch_data.get('name', ''),
         'curr_diff': difficulty
     }'''
-    # return app.send_static_file('index.html')
-    return render_template('index.html', subject_id=message_launch_data['sub'])
+    context_info:dict = message_launch_data['https://purl.imsglobal.org/spec/lti/claim/custom']
+    return render_template('index.html',
+        course_id=context_info['canvas_course_id'],
+        canvas_user_id=context_info['canvas_user_id'],
+        user_email=context_info['user_username'])
 
 
 @app.route('/jwks/', methods=['GET'])
