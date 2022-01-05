@@ -111,7 +111,6 @@ def login():
 
     oidc_login = FlaskOIDCLogin(flask_request, tool_conf, launch_data_storage=launch_data_storage)
 
-    # print("login", flush=True)
     return oidc_login\
         .enable_check_cookies(
             main_msg="Your browser prohibits saving cookies in an iframe.",
@@ -142,9 +141,8 @@ def launch():
         'curr_user_name': message_launch_data.get('name', ''),
         'curr_diff': difficulty
     }'''
-    # print("launched", flush=True)
     # return app.send_static_file('index.html')
-    return render_template('index.html')
+    return render_template('index.html', subject_id=message_launch_data['sub'])
 
 
 @app.route('/jwks/', methods=['GET'])
