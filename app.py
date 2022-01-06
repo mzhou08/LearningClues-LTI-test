@@ -150,12 +150,18 @@ def launch():
     # user_login_id: the login id of the requesting user.
     #   DEV: user's email
     #   PROD Canvas: user's UMich Uniqname
+    # is_instructor: true or false
+
+    is_instructor = \
+        'http://purl.imsglobal.org/vocab/lis/v2/institution/person#Instructor' \
+        in message_launch_data['https://purl.imsglobal.org/spec/lti/claim/roles']
 
     return render_template('index.html',
         course_id=context_info['canvas_course_id'],
         canvas_user_id=context_info['canvas_user_id'],
         user_username=context_info['user_username'],
-        user_login_id=context_info['login_id'])
+        user_login_id=context_info['login_id'],
+        is_instructor=is_instructor)
 
 
 @app.route('/jwks/', methods=['GET'])
