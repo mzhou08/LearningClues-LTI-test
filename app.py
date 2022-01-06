@@ -5,7 +5,6 @@ import pprint
 from tempfile import mkdtemp
 from flask import Flask, jsonify, request, url_for
 from flask_caching import Cache
-from flask_debugtoolbar import DebugToolbarExtension
 
 from flask import render_template
 
@@ -150,7 +149,7 @@ def launch():
     # user_login_id: the login id of the requesting user.
     #   DEV: user's email
     #   PROD Canvas: user's UMich Uniqname
-    # is_instructor: true or false
+    # is_instructor: whether the requesting user is an instructor for the course.
 
     is_instructor = \
         'http://purl.imsglobal.org/vocab/lis/v2/institution/person#Instructor' \
