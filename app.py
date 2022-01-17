@@ -27,6 +27,9 @@ class ReverseProxied(object):
     # defining ReverseProxied(arg), class acts like a function
     def __call__(self, environ, start_response):
 
+        request_origin = environ.get('HTTP_COOKIE')
+        print(request_origin)
+
         #either HTTP or HTTPS
         scheme = environ.get('HTTP_X_FORWARDED_PROTO')
         # respecting the forwarded scheme: true = HTTPS
@@ -154,6 +157,8 @@ def launch():
     is_instructor = \
         'http://purl.imsglobal.org/vocab/lis/v2/institution/person#Instructor' \
         in message_launch_data['https://purl.imsglobal.org/spec/lti/claim/roles']
+
+    session_id = request.cookies.get('lti1p3-session-id')
 
     return render_template('index.html',
         course_id=context_info['canvas_course_id'],
